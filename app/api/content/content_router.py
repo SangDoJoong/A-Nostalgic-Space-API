@@ -36,14 +36,19 @@ async def content_create(
         raise e
 
 
-"""
-@router.get("/refresh", status_code=status.HTTP_204_NO_CONTENT)
-def content_refresh( db: Session = Depends(get_db)):
+@router.get("/mycontent")
+def content_refresh(
+    current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)
+):
 
-    #content_crud.create_content(db=db,content_create=_content_create)
+    try:
 
-    return {
-        "status_code": status.HTTP_200_OK,
-        "detail":"정상적으로 생성되었습니다.",
-    }
-"""
+        content_list = content_crud.get_user_content(db, current_user["username"])
+        print(content_list)
+        return {
+            "status_code": status.HTTP_200_OK,
+            "detail": "정상적으로 저장되었습니다.",
+            "data": {"content_ids ": content_list},
+        }
+    except HTTPException as e:
+        raise e
