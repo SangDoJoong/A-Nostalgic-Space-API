@@ -1,0 +1,17 @@
+### 헬스 체크
+GET {{backend_api}}/ping
+Content-Type: application/json
+
+### env 조회
+GET {{backend_api}}/env
+Content-Type: application/json
+
+### 유저 생성
+POST {{backend_api}}/api/user/create
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password1": "1234",
+  "password2": "1234"
+}

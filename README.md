@@ -8,4 +8,13 @@ A-Nostalgic-Space-API
 To contribute for this repo, please install `pre-commit` package for our code styling.
 ```bash
 pre-commit install
+
+### 전체 파일에 대해 pre-commit을 실행
+pre-commit run --all-files
+```
+
+### Run
+```bash
+pip install -r requirements.txt
+python main.py --APP_ENV=dev
 ```

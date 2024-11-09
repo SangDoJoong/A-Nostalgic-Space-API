@@ -1,14 +1,15 @@
 import os
 from datetime import datetime, timedelta
 
-from database.database_init import get_db
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
 from starlette import status
-from user import user_crud, user_schema
-from user.user_crud import pwd_context
+
+from api.user import user_crud, user_schema
+from api.user.user_crud import pwd_context
+from config.database_init import get_db
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 SECRET_KEY = os.environ.get("SECRET_KEY")

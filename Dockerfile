@@ -29,4 +29,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY ./app /app
 
 # 컨테이너 실행 명령 설정
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
+CMD ["python", "main.py", "--APP_ENV=dev"]

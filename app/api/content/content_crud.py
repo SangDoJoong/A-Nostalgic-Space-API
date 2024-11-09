@@ -1,9 +1,10 @@
 import pendulum
-from content.content_schema import ContentCreate
 from fastapi import HTTPException
-from models import Content, ContentImage
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
+
+from api.content.content_schema import ContentCreate
+from models import Content
 
 
 def create_content(current_user: dict, db: Session, content_create: ContentCreate):
@@ -19,11 +20,7 @@ def create_content(current_user: dict, db: Session, content_create: ContentCreat
         )
         db.add(db_content)
         db.flush()
-        for image in content_create.image_id:
-            db_content_image = ContentImage(
-                content_id=db_content.contents_id, image_id=image
-            )
-            db.add(db_content_image)
+
         db.commit()
 
         return db_content.contents_id
