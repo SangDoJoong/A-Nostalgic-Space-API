@@ -10,18 +10,13 @@ from models import ContentImage, Image, User, UserImage
 load_dotenv()
 
 
-def create_contentimage(db: Session, image_create: ImageCreate, content_id: int):
+def create_contentimage(db: Session, image_create: ImageCreate):
     try:
         db_image = Image(
             created_at=pendulum.now("Asia/Seoul"),
             image_address=image_create.image_address,
         )
         db.add(db_image)
-        db.flush()
-        db_content_image = ContentImage(
-            content_id=content_id, image_id=db_image.image_id
-        )
-        db.add(db_content_image)
 
         db.commit()
         return db_image.image_id

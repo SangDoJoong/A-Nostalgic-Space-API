@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from typing import List
 
-from fastapi import APIRouter, Depends, File, Form, HTTPException, Query, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from starlette import status
@@ -21,6 +21,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/token")
 
 async def save_file(file: UploadFile, upload_dir: str = "/uploads/") -> str:
     try:
+        # upload_dir = os.getcwd()+upload_dir
         file_contents = await file.read()
         _, file_extension = os.path.splitext(file.filename)
         file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S%f')}{file_extension}"
@@ -62,19 +63,18 @@ async def upload_userimage(
 
 @router.post("/contentimage")
 async def upload_contentimage(
+    current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db),
     files: List[UploadFile] = File(...),
-    content_id: int = Form(...),
 ):
 
     image_ids = []
     for file in files:
         try:
+
             saved_file_path = await save_file(file)
             _image_create = ImageCreate(image_address=saved_file_path)
-            image_id = image_crud.create_contentimage(
-                db=db, image_create=_image_create, content_id=content_id
-            )
+            image_id = image_crud.create_contentimage(db=db, image_create=_image_create)
             image_ids.append(image_id)
         except HTTPException as e:
             raise e
@@ -103,13 +103,22 @@ def get_userimages(
 
 
 @router.get("/contentimage")
-def get_contentimages(content_id: str = Query(...), db: Session = Depends(get_db)):
+def get_contentimages(
+    content_ids: List[int] = Query(...),
+    current_user: dict = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
 
-    user_images = image_crud.get_content_image(db, content_id)
-    if not user_images:
-        raise HTTPException(status_code=404, detail="User images not found")
+    content_images_idx = {}
+    for content_id in content_ids:
+        content_images = image_crud.get_content_image(db, content_id)
+        if not content_images:
+            continue
+        content_images_idx[content_id] = content_images
+    if content_images_idx == {}:
+        raise HTTPException(status_code=404, detail="Content images not found")
     return {
         "status_code": status.HTTP_200_OK,
         "detail": "이미지 정보가 업로드 되었습니다",
-        "data": {"image_id_index ": user_images},
+        "data": {"content_images ": content_images_idx},
     }

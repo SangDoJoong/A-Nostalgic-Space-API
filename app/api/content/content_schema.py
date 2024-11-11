@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import HTTPException
 from pydantic import BaseModel, validator
 from starlette import status
@@ -6,6 +8,7 @@ from starlette import status
 class ContentCreate(BaseModel):
     title: str
     content: str
+    image_id: List
 
     @validator("content", "title", pre=True, always=True)
     def not_empty(cls, v, field):

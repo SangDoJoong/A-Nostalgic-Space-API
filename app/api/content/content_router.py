@@ -22,30 +22,33 @@ async def content_create(
 ):
 
     try:
-        _content_create = ContentCreate(
-            title=content_create.title, content=content_create.content
-        )
+
         contents_id = content_crud.create_content(
-            current_user, db=db, content_create=_content_create
+            current_user, db=db, content_create=content_create
         )
 
         return {
             "status_code": status.HTTP_200_OK,
             "detail": "정상적으로 저장되었습니다.",
-            "data": {"content_id_index ": contents_id},
+            "data": {"contents_id ": contents_id},
         }
     except HTTPException as e:
         raise e
 
 
-"""
-@router.get("/refresh", status_code=status.HTTP_204_NO_CONTENT)
-def content_refresh( db: Session = Depends(get_db)):
+@router.get("/mycontent")
+def content_refresh(
+    current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)
+):
 
-    #content_crud.create_content(db=db,content_create=_content_create)
+    try:
 
-    return {
-        "status_code": status.HTTP_200_OK,
-        "detail":"정상적으로 생성되었습니다.",
-    }
-"""
+        content_list = content_crud.get_user_content(db, current_user["username"])
+        print(content_list)
+        return {
+            "status_code": status.HTTP_200_OK,
+            "detail": "정상적으로 저장되었습니다.",
+            "data": {"content_ids ": content_list},
+        }
+    except HTTPException as e:
+        raise e
