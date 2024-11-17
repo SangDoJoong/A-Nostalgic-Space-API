@@ -1,11 +1,3 @@
-# FROM python:3.10
-
-# WORKDIR /code
-
-# COPY ./requirements.txt /code/requirements.txt
-
-# RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
-
 FROM python:3.10
 
 # 패키지 업데이트 및 PostgreSQL 및 PostGIS 설치
@@ -23,10 +15,8 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-
-
 # 애플리케이션 소스코드 복사
-COPY ./app /app
+COPY . .
 
 # 컨테이너 실행 명령 설정
-CMD ["python", "main.py", "--APP_ENV=dev"]
+CMD ["python", "app/main.py", "--APP_ENV=dev"]
