@@ -6,7 +6,7 @@ on:
       - feat/ghcr
 
 env:
-  DOCKER_IMAGE: ghcr.io/SangDoJoong/nostalgic-space-api
+  DOCKER_IMAGE: ghcr.io/sangdojoong/nostalgic-space-api
   VERSION: ${{ github.sha }}
 
 jobs:
@@ -44,7 +44,7 @@ jobs:
           cat .env.dev
 
       # Build the Docker image
-      - name: Build Docker image성
+      - name: Build Docker image
         run: |
           docker build -t $DOCKER_IMAGE:latest .
 
