@@ -1,0 +1,55 @@
+name: Build and Push Docker Image to GHCR
+
+on:
+  push:
+    branches:
+      - feat/ghcr
+
+env:
+  DOCKER_IMAGE: ghcr.io/SangDoJoong/nostalgic-space-api
+  VERSION: ${{ github.sha }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Log in to GitHub Container Registry
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: nostalgic-space-api
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      # Create the .env.dev file
+      - name: Create .env.dev file
+        run: |
+          echo "APP_ENV=dev" >> .env.dev
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.dev
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.dev
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.dev
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.dev
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env.dev
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env.dev
+          echo "SWAGGER_NAME=${{ secrets.SWAGGER_NAME }}" >> .env.dev
+          echo "SWAGGER_PASSWORD=${{ secrets.SWAGGER_PASSWORD }}" >> .env.dev
+          echo "CORS_ORIGINS=*" >> .env.dev
+          cat .env.dev
+
+      # Build the Docker image
+      - name: Build Docker image성
+        run: |
+          docker build -t $DOCKER_IMAGE:latest .
+
+      # Push the Docker image to GHCR
+      - name: Push Docker image to GHCR
+        run: |
+          docker push $DOCKER_IMAGE:$VERSION
+          docker push $DOCKER_IMAGE:latest
