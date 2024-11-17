@@ -37,8 +37,6 @@ services:
       - /home/ubuntu/uploads:/uploads
     networks:
       - backend
-    env_file:
-      - secret.env
 
 networks:
   backend:
