@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - feat/ghcr
+      - dev
 
 env:
   DOCKER_IMAGE: ghcr.io/sangdojoong/api
