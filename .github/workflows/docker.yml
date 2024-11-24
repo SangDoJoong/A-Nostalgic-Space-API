@@ -6,7 +6,7 @@ on:
       - feat/ghcr
 
 env:
-  DOCKER_IMAGE: ghcr.io/nostalgic-space-api/api
+  DOCKER_IMAGE: ghcr.io/sangdojoong/api
   VERSION: ${{ github.sha }}
 
 jobs:
