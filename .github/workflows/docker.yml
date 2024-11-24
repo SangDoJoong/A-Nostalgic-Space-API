@@ -6,7 +6,7 @@ on:
       - feat/ghcr
 
 env:
-  DOCKER_IMAGE: ghcr.io/nostalgic-space-api
+  DOCKER_IMAGE: ghcr.io/nostalgic-space-api/api
   VERSION: ${{ github.sha }}
 
 jobs:
@@ -25,7 +25,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: nostalgic-space-api
+          username: sangdojoong
           password: ${{ secrets.GHCR_TOKEN }}
 
       # Create the .env.dev file
