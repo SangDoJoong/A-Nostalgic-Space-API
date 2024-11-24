@@ -46,7 +46,7 @@ jobs:
       # Build the Docker image
       - name: Build Docker image
         run: |
-          docker build -t $DOCKER_IMAGE:$VERSION
+          docker build -t $DOCKER_IMAGE:$VERSION .
           docker tag $DOCKER_IMAGE:$VERSION $DOCKER_IMAGE:latest
 
       # Push the Docker image to GHCR
