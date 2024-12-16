@@ -18,3 +18,8 @@ secret.env
 
 ## key
 *.key
+
+## sphinx
+Makefile
+make.bat
+/_build
