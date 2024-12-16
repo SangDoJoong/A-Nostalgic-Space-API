@@ -20,6 +20,4 @@ secret.env
 *.key
 
 ## sphinx
-Makefile
-make.bat
 /_build
