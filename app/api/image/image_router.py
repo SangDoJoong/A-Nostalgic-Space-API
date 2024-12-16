@@ -43,6 +43,7 @@ async def save_file(file: UploadFile, upload_dir: str = "/uploads/"):
         HTTPException: 파일 저장 중 오류가 발생한 경우.
     """
     try:
+        # upload_dir = os.getcwd()+upload_dir
         file_contents = await file.read()
         _, file_extension = os.path.splitext(file.filename)
         file_name = f"{datetime.now().strftime('%Y%m%d%H%M%S%f')}{file_extension}"

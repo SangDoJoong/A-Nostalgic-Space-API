@@ -105,6 +105,7 @@ def login_for_access_token(
 def login_for_access_token_with_token(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
+    # TODO: check the function name again. Seems duplicate with the above function.
     """
     사용자 로그인 및 액세스 토큰 발급 (중복 함수).
 
@@ -155,7 +156,7 @@ def get_current_user(token: str = Depends(oauth2_scheme)):
     )
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username = payload.get("sub")
+        username: str = payload.get("sub")
 
         if username is None:
             raise credentials_exception
